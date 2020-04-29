@@ -6,6 +6,20 @@ const passport = require ('passport');
 router.get('/me',(req, res) =>{
     res.send(req.user)
 })
+router.get('/', (req, res) => {
+
+    const authenticated = req.isAuthenticated()
+    if(authenticated){
+        fetch(db)
+        .then(response=>response.json())
+        .then(data=>{
+            res.send(data)
+        })
+    }else{
+        res.send('You need to be logged');
+    }
+
+})
 router.get('/:param', (req, res) =>{
     const search = req.params.param.toLowerCase();
     const authenticated = req.isAuthenticated()
@@ -22,7 +36,7 @@ router.get('/:param', (req, res) =>{
             }
         })
     }else{
-        res.send('You need to be login');
+        res.send('You need to be logged');
     }
 })
 router.post('/login', passport.authenticate('local'), (req, res) => {
